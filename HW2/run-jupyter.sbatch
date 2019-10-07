@@ -4,7 +4,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:1
 #SBATCH --time=100:00:00
-#SBATCH --mem=8GB
+#SBATCH --mem=80GB
 #SBATCH --job-name=GPUDemo
 #SBATCH --mail-type=END
 #SBATCH --mail-user=itp@nyu.edu
