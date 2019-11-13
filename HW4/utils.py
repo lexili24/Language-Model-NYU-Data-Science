@@ -158,29 +158,29 @@ class _HypothesisTail(object):
 
 def reorder_encoder_states(encoder_states, indices):
     """Reorder encoder states according to a new set of indices."""
-    enc_out, _ , attention_mask = encoder_states
+    enc_out, hidden, attention_mask = encoder_states
 
     # LSTM or GRU/RNN hidden state?
-    # if isinstance(hidden, torch.Tensor):
-    #     hid, cell = hidden, None
-    # else:
-    #     hid, cell = hidden
+    if isinstance(hidden, torch.Tensor):
+        hid, cell = hidden, None
+    else:
+        hid, cell = hidden
 
     if not torch.is_tensor(indices):
         # cast indices to a tensor if needed
         indices = torch.LongTensor(indices).to(hid.device)
 
-    # hid = hid.index_select(1, indices)
-    # if cell is None:
-    #     hidden = hid
-    # else:
-    #     cell = cell.index_select(1, indices)
-    #     hidden = (hid, cell)
+    hid = hid.index_select(1, indices)
+    if cell is None:
+        hidden = hid
+    else:
+        cell = cell.index_select(1, indices)
+        hidden = (hid, cell)
 
     enc_out = enc_out.index_select(0, indices)
     attention_mask = attention_mask.index_select(0, indices)
 
-    return enc_out, None, attention_mask
+    return enc_out, hidden, attention_mask
 
 
 def reorder_decoder_incremental_state(incremental_state, inds):
